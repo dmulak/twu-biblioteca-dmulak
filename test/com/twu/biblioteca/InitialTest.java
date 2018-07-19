@@ -37,6 +37,12 @@ public class InitialTest {
         assertTrue(consoleStream.toString().contains("Invalid Option"));
     }
 
+    @Test
+    public void testCorrectUserInputShowsBookList() {
+        menu.selectUserMenuOption(1);
+        assertTrue(consoleStream.toString().contains("Narnia"));
+    }
+
 
 
 
