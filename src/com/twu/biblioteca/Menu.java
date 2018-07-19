@@ -71,11 +71,13 @@ public class Menu {
 
     public boolean checkOutBook(String titleToCheckOut) {
         for (Book book : bookList) {
-            if (book.getTitle().equals(titleToCheckOut)) {
+            if (book.getTitle().equals(titleToCheckOut) && book.isAvailable()) {
                 book.setAvailability(false);
+                System.out.println("Book checked out successfully!");
                 return true;
             }
         }
+        System.out.println("Please select a valid book title.");
         return false;
     }
 }
