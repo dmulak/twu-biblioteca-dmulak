@@ -15,6 +15,8 @@ public class BibliotecaTest {
     private final ByteArrayOutputStream consoleStream = new ByteArrayOutputStream();
     private Menu menu = new Menu();
     private ArrayList<Book> bookList = new ArrayList<Book>();
+    private ArrayList<Movie> movieList = new ArrayList<Movie>();
+
 
 
     @Before
@@ -26,6 +28,13 @@ public class BibliotecaTest {
         menu.fillBookList(book1);
         menu.fillBookList(book2);
         menu.fillBookList(book3);
+
+        Movie movie1 = new Movie("Star Wars", "1977", "George Lucas", "7");
+        Movie movie2 = new Movie("King Kong", "1984", "blah blah", "6");
+        Movie movie3 = new Movie("Interstellar", "2014", "blah blah", "8");
+        menu.fillMovieList(movie1);
+        menu.fillMovieList(movie2);
+        menu.fillMovieList(movie3);
     }
 
     @Test
@@ -100,6 +109,14 @@ public class BibliotecaTest {
         menu.checkOutBook(titleToCheckOut);
         menu.returnBook(incorrectTitleToReturn);
         assertTrue(consoleStream.toString().contains("Invalid"));
+    }
+
+    @Test
+    public void testCorrectUserInputShowsMovieList() {
+        menu.selectUserMenuOption(4);
+        assertTrue(consoleStream.toString().contains("Star Wars"));
+        assertTrue(consoleStream.toString().contains("King Kong"));
+        assertTrue(consoleStream.toString().contains("Interstellar"));
     }
 
 
