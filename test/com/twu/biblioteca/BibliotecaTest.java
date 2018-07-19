@@ -9,10 +9,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class InitialTest {
+public class BibliotecaTest {
     private final ByteArrayOutputStream consoleStream = new ByteArrayOutputStream();
     private Menu menu = new Menu();
     private ArrayList<Book> bookList = new ArrayList<Book>();
@@ -60,6 +59,14 @@ public class InitialTest {
         ByteArrayInputStream input = new ByteArrayInputStream("1".getBytes());
         System.setIn(input);
         assertEquals(1, menu.getUserMenuChoice());
+    }
+
+    @Test
+    public void testCheckedOutBookDoesNotAppearInList(){
+        String titleToCheckOut = "Narnia";
+        menu.checkOutBook(titleToCheckOut);
+        menu.printBookList();
+        assertFalse(consoleStream.toString().contains(titleToCheckOut));
     }
 
 

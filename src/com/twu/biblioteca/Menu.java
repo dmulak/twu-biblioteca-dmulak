@@ -23,9 +23,11 @@ public class Menu {
 
     public void printBookList(){
         for (Book book : bookList){
-            System.out.print(book.getTitle() + "\t");
-            System.out.print(book.getAuthor() + "\t");
-            System.out.println(book.getYear());
+            if (book.isAvailable()) {
+                System.out.print(book.getTitle() + "\t");
+                System.out.print(book.getAuthor() + "\t");
+                System.out.println(book.getYear());
+            }
         }
     }
 
@@ -35,6 +37,8 @@ public class Menu {
 
     public void showMenuOptions(){
         System.out.println("1. List books");
+        System.out.println("2. Check Out books");
+        System.out.println("0. Quit Biblioteca");
         System.out.println("Please select an option");
     }
 
@@ -49,8 +53,29 @@ public class Menu {
         if (choice == 1) {
             printBookList();
         }
+        else if (choice == 2){
+            checkOutBook(getCheckOutBookTitle());
+        }
+        else if (choice == 0){
+            return;
+        }
         else {
             System.out.println("Invalid Option");
         }
+    }
+
+    public String getCheckOutBookTitle(){
+        Scanner input = new Scanner(System.in);
+        return input.nextLine();
+    }
+
+    public boolean checkOutBook(String titleToCheckOut) {
+        for (Book book : bookList) {
+            if (book.getTitle().equals(titleToCheckOut)) {
+                book.setAvailability(false);
+                return true;
+            }
+        }
+        return false;
     }
 }

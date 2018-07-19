@@ -9,6 +9,12 @@ public class BibliotecaApp {
         menu.startBiblioteca();
         menu.showMenuOptions();
 
-        menu.selectUserMenuOption(menu.getUserMenuChoice());
+        int userChoice = -1;
+        while (userChoice != 0) {
+            userChoice = menu.getUserMenuChoice();
+            menu.selectUserMenuOption(userChoice);
+            if (userChoice != 0) menu.showMenuOptions();
+        }
+
     }
 }
