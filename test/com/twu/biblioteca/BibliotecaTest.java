@@ -31,13 +31,13 @@ public class BibliotecaTest {
     @Test
     public void welcomeMessageTest() {
         menu.startBiblioteca();
-        assertEquals("Hello\n", consoleStream.toString());
+        assertEquals("Hello user!\n", consoleStream.toString());
     }
 
     @Test
     public void testShowMenuOptions() {
         menu.showMenuOptions();
-        assertTrue(consoleStream.toString().contains("List books"));
+        assertTrue(consoleStream.toString().contains("List all available books"));
     }
 
     @Test
@@ -69,7 +69,38 @@ public class BibliotecaTest {
         assertFalse(consoleStream.toString().contains(titleToCheckOut));
     }
 
+    @Test
+    public void testCheckedOutBookCannotBeCheckedOutAgain(){
+        String titleToCheckOut = "Narnia";
+        menu.checkOutBook(titleToCheckOut);
+        menu.checkOutBook(titleToCheckOut);
+        assertTrue(consoleStream.toString().contains("Invalid"));
+    }
 
+    @Test
+    public void testCannotCheckedOutInvalidTitle(){
+        String incorrectTitleToCheckOut = "Marnia";
+        menu.checkOutBook(incorrectTitleToCheckOut);
+        assertTrue(consoleStream.toString().contains("Invalid"));
+    }
+
+    @Test
+    public void testReturnedBookAppearsInList(){
+        String titleToReturn = "Narnia";
+        menu.checkOutBook(titleToReturn);
+        menu.returnBook(titleToReturn);
+        menu.printBookList();
+        assertTrue(consoleStream.toString().contains(titleToReturn));
+    }
+
+    @Test
+    public void testCannotReturnInvalidTitle(){
+        String titleToCheckOut = "Narnia";
+        String incorrectTitleToReturn = "Marnia";
+        menu.checkOutBook(titleToCheckOut);
+        menu.returnBook(incorrectTitleToReturn);
+        assertTrue(consoleStream.toString().contains("Invalid"));
+    }
 
 
 }

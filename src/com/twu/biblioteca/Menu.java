@@ -22,6 +22,7 @@ public class Menu {
     }
 
     public void printBookList(){
+        System.out.println("Title\tAuthor\tYear Published");
         for (Book book : bookList){
             if (book.isAvailable()) {
                 System.out.print(book.getTitle() + "\t");
@@ -32,14 +33,16 @@ public class Menu {
     }
 
     public void startBiblioteca(){
-        System.out.print("Hello\n");
+        System.out.print("Hello user!\n");
     }
 
     public void showMenuOptions(){
-        System.out.println("1. List books");
-        System.out.println("2. Check Out books");
+        System.out.println("Here are your options:");
+        System.out.println("1. List all available books");
+        System.out.println("2. Check Out a book");
+        System.out.println("3. Return books");
         System.out.println("0. Quit Biblioteca");
-        System.out.println("Please select an option");
+        System.out.println("Please select an option:");
     }
 
     public int getUserMenuChoice(){
@@ -51,12 +54,19 @@ public class Menu {
 
     public void selectUserMenuOption(int choice){
         if (choice == 1) {
+            System.out.println("Available books in the library:");
             printBookList();
         }
         else if (choice == 2){
-            checkOutBook(getCheckOutBookTitle());
+            System.out.println("Please enter the book title you wish to check out:");
+            checkOutBook(getUserInputBookTitle());
+        }
+        else if (choice == 3){
+            System.out.println("Please enter the book title you wish to return:");
+            returnBook(getUserInputBookTitle());
         }
         else if (choice == 0){
+
             return;
         }
         else {
@@ -64,10 +74,11 @@ public class Menu {
         }
     }
 
-    public String getCheckOutBookTitle(){
+    public String getUserInputBookTitle(){
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
+
 
     public boolean checkOutBook(String titleToCheckOut) {
         for (Book book : bookList) {
@@ -77,7 +88,22 @@ public class Menu {
                 return true;
             }
         }
-        System.out.println("Please select a valid book title.");
+        System.out.println("Invalid option. Please select a valid book title.");
+        printBookList();
+        return false;
+    }
+
+
+    public boolean returnBook(String titleToReturn) {
+        for (Book book : bookList) {
+            if (book.getTitle().equals(titleToReturn) && !book.isAvailable()) {
+                book.setAvailability(true);
+                System.out.println("Book returned successfully!");
+                return true;
+            }
+        }
+        System.out.println("Invalid option. Please input valid book title to return.");
+        printBookList();
         return false;
     }
 }
