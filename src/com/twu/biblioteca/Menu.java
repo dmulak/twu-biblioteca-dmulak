@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Menu {
@@ -8,31 +9,24 @@ public class Menu {
     private ArrayList<Book> bookList = new ArrayList<Book>();
     private ArrayList<Movie> movieList = new ArrayList<Movie>();
 
-
-    public void fillBookList(Book book) {
-        bookList.add(book);
+    private ArrayList<Object> fillInventory(ArrayList itemList, Object... objects) {
+        itemList.addAll(Arrays.asList(objects));
+        return itemList;
     }
 
-    public void fillMovieList(Movie movie) {
-        movieList.add(movie);
-    }
 
     public void setUp(){
         Book book1 = new Book("Narnia", "CS Lewis", "1920");
         Book book2 = new Book("The Great Gatsby", "F. Scott Fitzgerald", "1925");
         Book book3 = new Book("Harry Potter", "JK Rowling", "2003");
 
-        fillBookList(book1);
-        fillBookList(book2);
-        fillBookList(book3);
-
         Movie movie1 = new Movie("Star Wars", "1977", "George Lucas", "7");
         Movie movie2 = new Movie("King Kong", "1984", "blah blah", "6");
         Movie movie3 = new Movie("Interstellar", "2014", "blah blah", "8");
 
-        fillMovieList(movie1);
-        fillMovieList(movie2);
-        fillMovieList(movie3);
+
+        fillInventory(bookList, book1, book2, book3);
+        fillInventory(movieList, movie1, movie2, movie3);
     }
 
 
@@ -99,14 +93,14 @@ public class Menu {
             System.out.println("Available movies in the library:");
             printMovieList();
         }
-//        else if (choice == 5){
-//            System.out.println("Please enter the movie title you wish to check out:");
-//            checkOutBook(getUserInputTitle());
-//        }
-//        else if (choice == 6){
-//            System.out.println("Please enter the movie title you wish to return:");
-//            returnBook(getUserInputTitle());
-//        }
+        else if (choice == 5){
+            System.out.println("Please enter the movie title you wish to check out:");
+            checkOutBook(getUserInputTitle());
+        }
+        else if (choice == 6){
+            System.out.println("Please enter the movie title you wish to return:");
+            returnBook(getUserInputTitle());
+        }
         else if (choice == 0){
             return;
         }
@@ -145,6 +139,32 @@ public class Menu {
         }
         System.out.println("Invalid option. Please input valid book title to return.");
         printBookList();
+        return false;
+    }
+
+    public boolean checkOutMovie(String titleToCheckOut) {
+        for (Movie movie : movieList) {
+            if (movie.getTitle().equals(titleToCheckOut) && movie.isAvailable()) {
+                movie.setAvailability(false);
+                System.out.println("Movie checked out successfully!");
+                return true;
+            }
+        }
+        System.out.println("Invalid option. Please select a valid movie title.");
+        printMovieList();
+        return false;
+    }
+
+    public boolean returnMovie(String titleToReturn) {
+        for (Movie movie : movieList) {
+            if (movie.getTitle().equals(titleToReturn) && !movie.isAvailable()) {
+                movie.setAvailability(true);
+                System.out.println("Movie returned successfully!");
+                return true;
+            }
+        }
+        System.out.println("Invalid option. Please input valid book title to return.");
+        printMovieList();
         return false;
     }
 }
