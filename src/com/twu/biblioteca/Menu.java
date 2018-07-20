@@ -6,12 +6,21 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private ArrayList<Book> bookList = new ArrayList<Book>();
-    private ArrayList<Movie> movieList = new ArrayList<Movie>();
+    private ArrayList<LibraryItem> bookList = new ArrayList<LibraryItem>();
+    private ArrayList<LibraryItem> movieList = new ArrayList<LibraryItem>();
 
-    private ArrayList<Object> fillInventory(ArrayList itemList, Object... objects) {
-        itemList.addAll(Arrays.asList(objects));
+
+    private ArrayList<LibraryItem> fillInventory(ArrayList<LibraryItem> itemList, LibraryItem... items) {
+        itemList.addAll(Arrays.asList(items));
         return itemList;
+    }
+
+    public ArrayList<LibraryItem> getBookList(){
+        return bookList;
+    }
+
+    public ArrayList<LibraryItem> getMovieList(){
+        return movieList;
     }
 
 
@@ -30,28 +39,23 @@ public class Menu {
     }
 
 
-    public void printBookList(){
-        System.out.println("Title\tAuthor\tYear Published");
-        for (Book book : bookList){
-            if (book.isAvailable()) {
-                System.out.print(book.getTitle() + "\t");
-                System.out.print(book.getAuthor() + "\t");
-                System.out.println(book.getYear());
+    private void printInventory(ArrayList<LibraryItem> itemList) {
+        for (LibraryItem item : itemList){
+            if (item.isAvailable()) {
+                System.out.print(item.getTitle() + "\t");
+                System.out.println(item.getYear());
             }
         }
     }
 
-    public void printMovieList(){
-        System.out.println("Title\tAuthor\tYear Published");
-        for (Movie movie : movieList){
-            if (movie.isAvailable()) {
-                System.out.print(movie.getTitle() + "\t");
-                System.out.print(movie.getYear() + "\t");
-                System.out.print(movie.getDirector() + "\t");
-                System.out.println(movie.getRating());
-            }
-        }
+    public void printBookList(){
+        printInventory(bookList);
     }
+
+    public void printMovieList(){
+        printInventory(movieList);
+    }
+
 
     public void startBiblioteca(){
         System.out.print("Hello user!\n");
@@ -95,11 +99,11 @@ public class Menu {
         }
         else if (choice == 5){
             System.out.println("Please enter the movie title you wish to check out:");
-            checkOutBook(getUserInputTitle());
+            checkOutMovie(getUserInputTitle());
         }
         else if (choice == 6){
             System.out.println("Please enter the movie title you wish to return:");
-            returnBook(getUserInputTitle());
+            returnMovie(getUserInputTitle());
         }
         else if (choice == 0){
             return;
@@ -114,57 +118,47 @@ public class Menu {
         return input.nextLine();
     }
 
+    public void checkOutBook(String titleToCheckOut){
+        checkOutItem(bookList, titleToCheckOut);
+    }
 
-    public boolean checkOutBook(String titleToCheckOut) {
-        for (Book book : bookList) {
-            if (book.getTitle().equals(titleToCheckOut) && book.isAvailable()) {
-                book.setAvailability(false);
-                System.out.println("Book checked out successfully!");
+    public void checkOutMovie(String titleToCheckOut){
+        checkOutItem(movieList, titleToCheckOut);
+    }
+
+    public void returnBook(String titleToReturn){
+        returnItem(bookList, titleToReturn);
+    }
+
+    public void returnMovie(String titleToReturn){
+        returnItem(movieList, titleToReturn);
+    }
+
+
+    private boolean checkOutItem(ArrayList<LibraryItem> itemList, String titleToCheckOut) {
+        for (LibraryItem item : itemList) {
+            if (item.getTitle().equals(titleToCheckOut) && item.isAvailable()) {
+                item.setAvailability(false);
+                System.out.println("Item checked out successfully!");
                 return true;
             }
         }
-        System.out.println("Invalid option. Please select a valid book title.");
-        printBookList();
+        System.out.println("Invalid option. Please select a valid title.");
+        printInventory(itemList);
         return false;
     }
 
 
-    public boolean returnBook(String titleToReturn) {
-        for (Book book : bookList) {
-            if (book.getTitle().equals(titleToReturn) && !book.isAvailable()) {
-                book.setAvailability(true);
-                System.out.println("Book returned successfully!");
+    private boolean returnItem(ArrayList<LibraryItem> itemList, String titleToReturn) {
+        for (LibraryItem item : itemList) {
+            if (item.getTitle().equals(titleToReturn) && !item.isAvailable()) {
+                item.setAvailability(true);
+                System.out.println("Item returned successfully!");
                 return true;
             }
         }
-        System.out.println("Invalid option. Please input valid book title to return.");
-        printBookList();
-        return false;
-    }
-
-    public boolean checkOutMovie(String titleToCheckOut) {
-        for (Movie movie : movieList) {
-            if (movie.getTitle().equals(titleToCheckOut) && movie.isAvailable()) {
-                movie.setAvailability(false);
-                System.out.println("Movie checked out successfully!");
-                return true;
-            }
-        }
-        System.out.println("Invalid option. Please select a valid movie title.");
-        printMovieList();
-        return false;
-    }
-
-    public boolean returnMovie(String titleToReturn) {
-        for (Movie movie : movieList) {
-            if (movie.getTitle().equals(titleToReturn) && !movie.isAvailable()) {
-                movie.setAvailability(true);
-                System.out.println("Movie returned successfully!");
-                return true;
-            }
-        }
-        System.out.println("Invalid option. Please input valid book title to return.");
-        printMovieList();
+        System.out.println("Invalid option. Please select a valid title to return to the library.");
+        printInventory(itemList);
         return false;
     }
 }
