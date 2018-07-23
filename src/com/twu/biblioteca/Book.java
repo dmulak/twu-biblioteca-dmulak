@@ -6,4 +6,12 @@ public class Book extends LibraryItem{
         super(title, author, year);
     }
 
+    @Override
+    public String getDetails() {
+        return String.format("|%20s|%20s|%5s|", getTitle(), getAuthor(), getYear());
+    }
+
+    public String getHeaders(){
+        return String.format("|%20s|%20s|%5s|", "Title", "Author", "Year");
+    }
 }

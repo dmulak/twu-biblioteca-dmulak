@@ -9,7 +9,6 @@ public class Menu {
     private ArrayList<LibraryItem> bookList = new ArrayList<LibraryItem>();
     private ArrayList<LibraryItem> movieList = new ArrayList<LibraryItem>();
 
-
     private ArrayList<LibraryItem> fillInventory(ArrayList<LibraryItem> itemList, LibraryItem... items) {
         itemList.addAll(Arrays.asList(items));
         return itemList;
@@ -33,17 +32,16 @@ public class Menu {
         Movie movie2 = new Movie("King Kong", "1984", "blah blah", "6");
         Movie movie3 = new Movie("Interstellar", "2014", "blah blah", "8");
 
-
         fillInventory(bookList, book1, book2, book3);
         fillInventory(movieList, movie1, movie2, movie3);
     }
 
 
     private void printInventory(ArrayList<LibraryItem> itemList) {
+        System.out.println(itemList.get(0).getHeaders());
         for (LibraryItem item : itemList){
             if (item.isAvailable()) {
-                System.out.print(item.getTitle() + "\t");
-                System.out.println(item.getYear());
+                System.out.println(item.getDetails());
             }
         }
     }
@@ -69,6 +67,7 @@ public class Menu {
         System.out.println("4. List all available movies");
         System.out.println("5. Check out a movie");
         System.out.println("6. Return a movie");
+        System.out.println("7. Show my account details");
         System.out.println("0. Quit Biblioteca");
         System.out.println("Please select an option:");
     }
@@ -80,58 +79,69 @@ public class Menu {
         return userChoice;
     }
 
-    public void selectUserMenuOption(int choice){
+    public void selectUserMenuOption(int choice, User user){
         if (choice == 1) {
             System.out.println("Available books in the library:");
             printBookList();
-        }
-        else if (choice == 2){
-            System.out.println("Please enter the book title you wish to check out:");
-            checkOutBook(getUserInputTitle());
-        }
-        else if (choice == 3){
-            System.out.println("Please enter the book title you wish to return:");
-            returnBook(getUserInputTitle());
         }
         else if (choice == 4) {
             System.out.println("Available movies in the library:");
             printMovieList();
         }
-        else if (choice == 5){
-            System.out.println("Please enter the movie title you wish to check out:");
-            checkOutMovie(getUserInputTitle());
-        }
-        else if (choice == 6){
-            System.out.println("Please enter the movie title you wish to return:");
-            returnMovie(getUserInputTitle());
-        }
         else if (choice == 0){
             return;
         }
-        else {
+        else if (choice > 7){
             System.out.println("Invalid Option");
+        }
+        else {
+            while (!user.isLoggedIn()) {
+                promptUserLogIn(user);
+            }
+            if (choice == 2) {
+                System.out.println("Please enter the book title you wish to check out:");
+                checkOutBook(getUserInput());
+            } else if (choice == 3) {
+                System.out.println("Please enter the book title you wish to return:");
+                returnBook(getUserInput());
+            } else if (choice == 5) {
+                System.out.println("Please enter the movie title you wish to check out:");
+                checkOutMovie(getUserInput());
+            } else if (choice == 6) {
+                System.out.println("Please enter the movie title you wish to return:");
+                returnMovie(getUserInput());
+            }
+            else if (choice == 7) {
+                user.showUserDetails();
+            }
         }
     }
 
-    public String getUserInputTitle(){
+    private void promptUserLogIn(User user) {
+        System.out.println("You must be logged in to perform this action.");
+        System.out.println("Dear " + user.getUsername() + " please enter your password:");
+        user.logIn(getUserInput());
+    }
+
+    public String getUserInput(){
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
 
-    public void checkOutBook(String titleToCheckOut){
-        checkOutItem(bookList, titleToCheckOut);
+    public boolean checkOutBook(String titleToCheckOut){
+        return checkOutItem(bookList, titleToCheckOut);
     }
 
-    public void checkOutMovie(String titleToCheckOut){
-        checkOutItem(movieList, titleToCheckOut);
+    public boolean checkOutMovie(String titleToCheckOut){
+        return checkOutItem(movieList, titleToCheckOut);
     }
 
-    public void returnBook(String titleToReturn){
-        returnItem(bookList, titleToReturn);
+    public boolean returnBook(String titleToReturn){
+        return returnItem(bookList, titleToReturn);
     }
 
-    public void returnMovie(String titleToReturn){
-        returnItem(movieList, titleToReturn);
+    public boolean returnMovie(String titleToReturn){
+        return returnItem(movieList, titleToReturn);
     }
 
 

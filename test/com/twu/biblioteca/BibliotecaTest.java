@@ -7,13 +7,13 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class BibliotecaTest {
     private final ByteArrayOutputStream consoleStream = new ByteArrayOutputStream();
     private Menu menu = new Menu();
+    private User user = new User("anonymous", "anonymous", "anonymous@email.com", "00000");
 
 
 
@@ -21,7 +21,7 @@ public class BibliotecaTest {
     public void setUp(){
         System.setOut(new PrintStream(consoleStream));
         menu.setUp();
-
+        user.setLoggedIn();
     }
 
     @Test
@@ -38,13 +38,13 @@ public class BibliotecaTest {
 
     @Test
     public void testIncorrectUserInput() {
-        menu.selectUserMenuOption(999);
+        menu.selectUserMenuOption(999, user);
         assertTrue(consoleStream.toString().contains("Invalid Option"));
     }
 
     @Test
     public void testCorrectUserInputShowsBookList() {
-        menu.selectUserMenuOption(1);
+        menu.selectUserMenuOption(1, user);
         assertTrue(consoleStream.toString().contains("Narnia"));
         assertTrue(consoleStream.toString().contains("The Great Gatsby"));
         assertTrue(consoleStream.toString().contains("Harry Potter"));
@@ -69,15 +69,15 @@ public class BibliotecaTest {
     public void testCheckedOutBookCannotBeCheckedOutAgain(){
         String titleToCheckOut = "Narnia";
         menu.checkOutBook(titleToCheckOut);
-        menu.checkOutBook(titleToCheckOut);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.checkOutBook(titleToCheckOut);
+        assertFalse(result);
     }
 
     @Test
     public void testCannotCheckedOutInvalidTitle(){
         String incorrectTitleToCheckOut = "Marnia";
-        menu.checkOutBook(incorrectTitleToCheckOut);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.checkOutBook(incorrectTitleToCheckOut);
+        assertFalse(result);
     }
 
     @Test
@@ -94,13 +94,13 @@ public class BibliotecaTest {
         String titleToCheckOut = "Narnia";
         String incorrectTitleToReturn = "Marnia";
         menu.checkOutBook(titleToCheckOut);
-        menu.returnBook(incorrectTitleToReturn);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.returnBook(incorrectTitleToReturn);
+        assertFalse(result);
     }
 
     @Test
     public void testCorrectUserInputShowsMovieList() {
-        menu.selectUserMenuOption(4);
+        menu.selectUserMenuOption(4, user);
         assertTrue(consoleStream.toString().contains("Star Wars"));
         assertTrue(consoleStream.toString().contains("King Kong"));
         assertTrue(consoleStream.toString().contains("Interstellar"));
@@ -118,15 +118,15 @@ public class BibliotecaTest {
     public void testCheckedOutMovieCannotBeCheckedOutAgain(){
         String titleToCheckOut = "King Kong";
         menu.checkOutMovie(titleToCheckOut);
-        menu.checkOutMovie(titleToCheckOut);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.checkOutMovie(titleToCheckOut);
+        assertFalse(result);
     }
 
     @Test
     public void testCannotCheckOutInvalidMovieTitle(){
         String incorrectTitleToCheckOut = "Hong Kong";
-        menu.checkOutMovie(incorrectTitleToCheckOut);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.checkOutMovie(incorrectTitleToCheckOut);
+        assertFalse(result);
     }
 
     @Test
@@ -143,9 +143,25 @@ public class BibliotecaTest {
         String titleToCheckOut = "King Kong";
         String incorrectTitleToReturn = "Hong Kong";
         menu.checkOutMovie(titleToCheckOut);
-        menu.returnMovie(incorrectTitleToReturn);
-        assertTrue(consoleStream.toString().contains("Invalid"));
+        boolean result = menu.returnMovie(incorrectTitleToReturn);
+        assertFalse(result);
     }
+
+//    @Test
+//    public void testCheckingOutBookRequiresLogIn(){
+//        String titleToCheckOut = "Narnia";
+//        user.setLoggedOut();
+//        menu.selectUserMenuOption(2, user);
+//        menu.printBookList();
+//        assertTrue(consoleStream.toString().contains(titleToCheckOut));
+//    }
+
+//    @Test
+//    public void testListingUserDetailsRequiresLogIn(){
+//        user.setLoggedOut();
+//        menu.selectUserMenuOption(7, user);
+//        assertTrue(consoleStream.toString().contains("You must be logged in"));
+//    }
 
 
 }

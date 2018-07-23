@@ -23,6 +23,14 @@ public class LibraryItem {
         this.isAvailable = true;
     }
 
+    public String getDetails(){
+        return title + "\t" + author + "\t" + director + "\t" + rating + "\t" + year;
+    }
+
+    public String getHeaders(){
+        return "Title\tAuthor\tDirector\tRating\tYear";
+    }
+
     public String getTitle() {
         return title;
     }
